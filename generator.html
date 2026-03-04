@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>DELULU - Professional Email Generator</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; padding: 30px; display: flex; gap: 25px; }
+        .input-panel { width: 350px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); height: fit-content; }
+        .preview-panel { flex-grow: 1; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        label { font-weight: bold; font-size: 13px; color: #555; }
+        input { width: 100%; padding: 12px; margin: 8px 0 20px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: #000; outline: none; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        button { width: 100%; padding: 15px; background: #000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; letter-spacing: 1px; }
+        button:hover { background: #333; }
+        h3 { margin-top: 0; color: #000; border-left: 4px solid #000; padding-left: 10px; }
+        #email-render-area { border: 1px dotted #ccc; padding: 15px; min-height: 500px; background: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="input-panel">
+        <h3>🛠 Cấu hình Email</h3>
+        <label>Tên khách hàng:</label>
+        <input type="text" id="custName" placeholder="Ví dụ: Luật sư Nguyễn Văn A">
+        
+        <label>Link Danh thiếp (URL):</label>
+        <input type="text" id="cardUrl" placeholder="https://ecard.delulu.vn/khach-a">
+
+        <label>Link Ảnh QR (Nếu có):</label>
+        <input type="text" id="qrUrl" placeholder="Để trống nếu muốn tự tạo QR từ link">
+        
+        <button onclick="generateEmail()">TẠO MẪU EMAIL TRẢ HÀNG</button>
+        
+        <div style="margin-top: 20px; font-size: 12px; color: #888; line-height: 1.4;">
+            <strong>Hướng dẫn:</strong><br>
+            1. Nhấn nút tạo mẫu.<br>
+            2. Dùng chuột bôi đen vùng Preview.<br>
+            3. Copy (Ctrl+C) và Paste (Ctrl+V) vào Gmail.
+        </div>
+    </div>
+
+    <div class="preview-panel">
+        <h3>👁 Xem trước Email (Preview)</h3>
+        <div id="email-render-area">
+            </div>
+    </div>
+
+    <script>
+        function generateEmail() {
+            const name = document.getElementById('custName').value || "Quý khách hàng";
+            const cardUrl = document.getElementById('cardUrl').value || "#";
+            // Sử dụng API tạo QR tự động nếu khách không nhập link ảnh QR riêng
+            const qrUrl = document.getElementById('qrUrl').value || "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(cardUrl);
+
+            const template = `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 25px;">
+                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
+                        <h2 style="margin:0; letter-spacing: 3px;">DELULU JOINT STOCK COMPANY</h2>
+                        <span style="font-size: 10px; color: #999;">BẢO MẬT - PHÁP LÝ SỐ - CÔNG NGHỆ</span>
+                    </div>
+                    
+                    <div style="padding: 10px 0;">
+                        <p>Xin chào <strong>${name}</strong>,</p>
+                        <p>Chúng tôi trân trọng gửi tới Anh/Chị sản phẩm <strong>Danh thiếp điện tử thông minh</strong> được thiết kế riêng cho thương hiệu cá nhân của Anh/Chị.</p>
+                        
+                        <div style="text-align: center; background: #fbfbfb; padding: 30px; border-radius: 15px; margin: 25px 0; border: 1px solid #f0f0f0;">
+                            <p style="margin-top:0; font-size: 14px;"><strong>MÃ QR CÁ NHÂN</strong></p>
+                            <img src="${qrUrl}" width="200" height="200" style="border: 10px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.08);">
+                            <br><br>
+                            <a href="${cardUrl}" style="display: inline-block; padding: 14px 30px; background: #000; color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px;">TRUY CẬP DANH THIẾP</a>
+                            <br>
+                            <small style="display: block; margin-top: 15px; color: #888;">(Anh/Chị có thể quét mã QR trên để kiểm tra ngay)</small>
+                        </div>
+
+                        <p><strong>💡 Hướng dẫn tối ưu trải nghiệm:</strong></p>
+                        <ul style="padding-left: 20px; font-size: 14px;">
+                            <li style="margin-bottom: 10px;"><strong>Sử dụng như App:</strong> Khi truy cập link trên điện thoại, hãy chọn <em>"Thêm vào màn hình chính"</em> để lưu icon danh thiếp ra màn hình.</li>
+                            <li style="margin-bottom: 10px;"><strong>Lưu danh bạ:</strong> Bấm nút <em>"Lưu danh bạ"</em> trực tiếp trên danh thiếp để đối tác đồng bộ thông tin của Anh/Chị trong 1 giây.</li>
+                        </ul>
+
+                        <div style="background-color: #fff9f9; border-left: 4px solid #000; padding: 15px; margin-top: 30px; font-size: 14px; font-style: italic;">
+                            Quý khách khi có nhu cầu cập nhật thông tin trên danh thiếp (lên chức, đổi số điện thoại...) hoặc thêm các trang liên kết để bổ sung thêm thông tin về lịch sử phát triển & kinh nghiệm, các dịch vụ của quý khách, vui lòng trả lời lại thư này để nhân viên liên hệ tư vấn trong thời gian sớm nhất và báo giá.
+                        </div>
+                    </div>
+
+                    <div style="font-size: 11px; color: #aaa; text-align: center; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
+                        Đây là email tự động từ hệ thống bàn giao sản phẩm của <strong>DELULU Corp</strong>.<br>
+                        Vui lòng không chia sẻ mã QR cho người không liên quan để bảo mật thông tin cá nhân.
+                    </div>
+                </div>
+            `;
+            document.getElementById('email-render-area').innerHTML = template;
+        }
+    </script>
+</body>
+</html>
